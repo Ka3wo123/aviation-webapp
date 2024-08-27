@@ -13,4 +13,4 @@ RUN yarn build
 FROM nginx:alpine
 
 COPY --from=build /aviation/webapp/build/ /usr/share/nginx/html
-COPY --from=build /aviation/webapp/docker/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /aviation/webapp/docker/nginx.conf /etc/nginx/conf.d/default.conf
