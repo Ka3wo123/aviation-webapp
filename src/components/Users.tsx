@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/Login.css'; // Assuming you will create a CSS file for styling
 
 const Users = () => {
     const [users, setUsers] = useState([]);

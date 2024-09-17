@@ -1,0 +1,16 @@
+.auth-page {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: url('../assets/images/background-airplane.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-evenly;
+}

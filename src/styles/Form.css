@@ -1,0 +1,86 @@
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.toast-container {
+  position: absolute;
+  top: 10px; /* Adjust this value to position it at a specific distance from the top */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000; /* Ensure it's on top of other elements */
+}
+
+
+.form {
+  width: 450px;
+  max-height: 900px;
+  margin-left: 100px;
+  padding: 50px 35px;
+  background-color: rgba(0, 0, 0, 0.13);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  position: relative;
+  z-index: 1;
+}
+
+.form h2 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 42px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.form label {
+  display: block;
+  margin-top: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.form input {
+  display: block;
+  height: 50px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0 10px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.form ::placeholder {
+  color: #e5e5e5;
+}
+
+.form button {
+  margin-top: 50px;
+  width: 100%;
+  background-color: #ffffff;
+  color: #080710;
+  padding: 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form p {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.form .btn-link {
+  color: #007bff;
+  font-size: 1rem;
+}
+
+.form .btn-link:hover {
+  text-decoration: underline;
+}
