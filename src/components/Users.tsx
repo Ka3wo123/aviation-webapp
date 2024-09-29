@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import UserService from '../services/UserService';
+import { AviationUser } from '../types/AviationUser';
 
 const Users = () => {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<AviationUser[]>([]);
 
     useEffect(() => {
-        const fetch = async () => {
-            const token = localStorage.getItem('accessToken');
-            const response = await axios.get("http://localhost:8082/api/user/users", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+        const sub = UserService.getUsers().subscribe({
+            next: (data) => {
+                setUsers(data);
+            },
+            error: (err) => {
+                console.log(err);
             }
-                
-            );
-            setUsers(response.data);
+        });
+
+        return () => {
+            sub.unsubscribe();
         }
-        
-        fetch();
     }, []);
-
-
 
     return (
         <div>
-<ul>
-    {users.map((u: any) => (
-        <li key={u.email}>
-            {u.name}
-        </li>
-    ))}
-</ul>
+            <ul>
+                {users.map((u: any) => (
+                    <li key={u.email}>
+                        {u.name}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
