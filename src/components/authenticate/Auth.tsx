@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
-import '../../styles/AuthPage.css'; // Optional: To style the parent component if needed
-import { Image } from "react-bootstrap";
+import '../../styles/AuthPage.css';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);

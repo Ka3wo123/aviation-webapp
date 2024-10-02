@@ -1,7 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { Button, Form, Toast, ToastContainer } from "react-bootstrap";
-import '../../styles/Form.css'
+import '../../styles/Form.css';
+import AuthService from "../../services/AuthService";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -19,13 +20,7 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8083/login',
-        {
-          username: email,
-          password: password
-        }
-      );
-      localStorage.setItem('accessToken', response.data.access_token);      
+      AuthService.login(email, password).subscribe();           
     } catch (err) {
       setShowToast(true);
     }

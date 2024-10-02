@@ -1,0 +1,69 @@
+.not-found-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f8ff;
+    padding: 0 50px;
+    text-align: center;
+  }
+  
+  .message-container {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .not-found-title {
+    font-size: 8rem;
+    color: #ff6f61;
+    margin: 0;
+  }
+  
+  .not-found-message {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .not-found-description {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .back-home-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-home-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .airplane-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .airplane-image {
+    width: 400px;
+    animation: flyaway 5s ease-in-out infinite;
+  }
+  
+  @keyframes flyaway {
+    0% {
+      transform: translateX(0) rotate(0deg);
+    }
+    50% {
+      transform: translateX(200px) translateY(-50px) rotate(10deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+  

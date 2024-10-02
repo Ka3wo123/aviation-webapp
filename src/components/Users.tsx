@@ -7,10 +7,10 @@ const Users = () => {
 
     useEffect(() => {
         const sub = UserService.getUsers().subscribe({
-            next: (data) => {
+            next: (data: AviationUser[]) => {
                 setUsers(data);
             },
-            error: (err) => {
+            error: (err: unknown) => {
                 console.log(err);
             }
         });
