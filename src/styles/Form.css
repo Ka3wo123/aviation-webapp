@@ -5,10 +5,10 @@
 
 .toast-container {
   position: absolute;
-  top: 10px; /* Adjust this value to position it at a specific distance from the top */
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000; /* Ensure it's on top of other elements */
+  z-index: 1000;
 }
 
 

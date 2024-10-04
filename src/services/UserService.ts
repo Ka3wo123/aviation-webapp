@@ -8,7 +8,7 @@ class UserService {
     public getUsers(): Observable<AviationUser[]> {
         const token = localStorage.getItem('accessToken');
         return from(
-            this._axios.get("http://localhost:8082/api/user/users", {
+            this._axios.get("/api/user/users", {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -19,4 +19,4 @@ class UserService {
     }
 }
 
-export default new UserService(axios.create({ baseURL: "http://localhost:8082" }));
+export default new UserService(axios.create({ baseURL: process.env.REACT_APP_IP_USERSERVICE }));

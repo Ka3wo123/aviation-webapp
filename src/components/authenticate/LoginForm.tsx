@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
 import { Button, Form, Toast, ToastContainer } from "react-bootstrap";
 import '../../styles/Form.css';
 import AuthService from "../../services/AuthService";

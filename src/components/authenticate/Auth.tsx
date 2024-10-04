@@ -4,7 +4,6 @@ import RegistrationForm from "./RegistrationForm";
 import '../../styles/AuthPage.css';
 
 const AuthPage: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div className="auth-page">

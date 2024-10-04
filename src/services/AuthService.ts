@@ -2,23 +2,25 @@ import axios, { Axios } from "axios";
 import { from } from "rxjs";
 
 class AuthService {
-    constructor(private readonly _axios: Axios) { }
+    constructor(
+        private readonly _axios: Axios
+    ) { }
 
     public login(email: string, password: string,) {
         return from(
-            this._axios.post("http://localhost:8083/login", 
+            this._axios.post(`/login`,
                 {
                     username: email,
-                    password: password  
-                }                
-            ).then( response => {
+                    password: password
+                }
+            ).then(response => {
                 const { access_token } = response.data;
                 this.saveToken(access_token);
                 return response.data;
             })
-            .catch(err => {
-                console.error("Auth failed")
-            })
+                .catch(err => {
+                    console.error("Auth failed " + err)
+                })
         )
     }
 
@@ -31,4 +33,4 @@ class AuthService {
     }
 }
 
-export default new AuthService(axios.create({ baseURL: "http://localhost:8083" }));
+export default new AuthService(axios.create({ baseURL: process.env.REACT_APP_IP_AUTHSERVICE }));
