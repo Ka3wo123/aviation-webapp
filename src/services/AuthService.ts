@@ -6,31 +6,35 @@ class AuthService {
         private readonly _axios: Axios
     ) { }
 
-    public login(email: string, password: string,) {
+    public login(email: string, password: string) {
         return from(
-            this._axios.post(`/login`,
-                {
-                    username: email,
-                    password: password
+            this._axios.post(`/login`, {
+                username: email,
+                password: password
+            }).then(response => {
+                if (response.data._embedded && response.data._embedded.errors) {
+                    throw new Error(response.data._embedded.errors[0].message);
                 }
-            ).then(response => {
+
                 const { access_token } = response.data;
                 this.saveToken(access_token);
-                return response.data;
+                return response.status;
+            }).catch(err => {
+                if (err.response) {
+                    console.error("Auth failed: " + err.message || "An error occurred");
+                    return err.response.status;
+                } else {
+                    console.error("Auth failed: " + err.message);
+                }
             })
-                .catch(err => {
-                    console.error("Auth failed " + err)
-                })
         )
     }
 
     private saveToken(token: string): void {
         localStorage.setItem("accessToken", token);
     }
-
-    private getToken(): string | null {
-        return localStorage.getItem("accessToken");
-    }
 }
 
-export default new AuthService(axios.create({ baseURL: process.env.REACT_APP_IP_AUTHSERVICE }));
+const authService = new AuthService(axios.create({ baseURL: process.env.REACT_APP_IP_AUTHSERVICE }));
+
+export default authService;

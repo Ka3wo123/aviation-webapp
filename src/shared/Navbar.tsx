@@ -1,22 +1,43 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Button, Dropdown } from 'react-bootstrap';
 import logo from '../assets/images/aviation_logo.png';
 import '../styles/Navbar.css';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { validateJWTToken } from '../utils/CheckToken';
 
-const NavBar = () => {    
+const NavBar = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    useEffect(() => {
+        const checkLogin = () => {
+            const isValid = validateJWTToken();
+            setIsLoggedIn(isValid);
+        };
+
+        checkLogin();
+    }, [isLoggedIn]);
+
+
+
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        setIsLoggedIn(false);
+        toast.success("You are logged out");
+    };
+
     return (
         <Navbar bg="dark" expand="lg" collapseOnSelect>
             <Container>
                 <Navbar.Brand href="/">
                     <img src={logo}
-                    width="40"
-                    height="40"
-                    className="d-inline-block align-top"
-                    style={{
-                        borderRadius: '50%'
-                    }}
-                    alt='Aviation logo'/>                 
+                        width="40"
+                        height="40"
+                        className="d-inline-block align-top"
+                        style={{
+                            borderRadius: '50%'
+                        }}
+                        alt='Aviation logo' />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -43,16 +64,22 @@ const NavBar = () => {
                                 <Dropdown.Item href="/flights/tracker" className='text-light'>Flight Tracker</Dropdown.Item>
                                 <Dropdown.Item href="/flights/schedules" className='text-light'>Flight Schedules</Dropdown.Item>
                             </Dropdown.Menu>
-                        </Dropdown>
+                        </Dropdown>                        
                     </Nav>
 
-
                     <Nav>
-                        <Nav.Item>
-                            <Link to="/auth" style={{ textDecoration: 'none' }}>
-                                <Button variant="outline-light">Login/Signup</Button>
-                            </Link>
-                        </Nav.Item>
+                        {isLoggedIn ? (                            
+                                <Nav.Item>
+                                    <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
+                                </Nav.Item>                                                            
+
+                        ) : (
+                            <Nav.Item>
+                                <Link to="/auth" style={{ textDecoration: 'none' }}>
+                                    <Button variant="outline-light">Login/Signup</Button>
+                                </Link>
+                            </Nav.Item>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

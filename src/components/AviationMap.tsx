@@ -11,7 +11,6 @@ import AirportDetails from './AirportDetails';
 import '../styles/AviationMap.css';
 
 const MapComponent = () => {
-    const [airports, setAirports] = useState<Airport[]>([]);
     const [markers, setMarkers] = useState<AirportMarker[]>([]);
     const [airportSearchTerm, setAirportSearchTerm] = useState<string>('');
     const [countrySearchTerm, setCountrySearchTerm] = useState<string>('');
@@ -32,7 +31,7 @@ const MapComponent = () => {
                     airportName: airport.airportName,
                     cityName: airport.cityName,
                     iata: airport.iataCode
-                }));                
+                }));
                 setMarkers(airportGeocode);
                 setFilteredAirports(airportGeocode);
             },
@@ -78,10 +77,7 @@ const MapComponent = () => {
                             click: () => handleMarkerClick(marker),
                         }}>
                         <Popup>
-                            <div>
-                                <p>{marker.airportName}</p>
-                                <p>{marker.cityName}</p>
-                            </div>
+                            <p>{marker.airportName}</p>
                         </Popup>
                     </Marker>
                 ))}

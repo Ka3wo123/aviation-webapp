@@ -14,4 +14,6 @@ class AirportService {
     }
 }
 
-export default new AirportService(axios.create({ baseURL: process.env.REACT_APP_IP_FLIGHTSERVICE }));
+const airportService = new AirportService(axios.create({ baseURL: process.env.REACT_APP_IP_FLIGHTSERVICE }));
+
+export default airportService;

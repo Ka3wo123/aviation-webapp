@@ -9,5 +9,6 @@ export default interface FlighData {
     departure: Departure,
     arrival: Arrival,
     airline: Airline,
+    cityName: string,
     liveFlight: LiveFlight
 }

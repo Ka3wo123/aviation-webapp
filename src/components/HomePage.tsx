@@ -102,19 +102,17 @@ const HomePage = () => {
                                 <Card.Text>
                                     Find Your flight to destination.
                                 </Card.Text>
-                                <Button variant="outline-primary">Book flight</Button>
+                                <Button variant="outline-primary">
+                                    <Link to={"/flight/assigning-form"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        Book flight
+                                    </Link>
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
 
             </Container>
-
-            <footer className="bg-dark text-light py-3 text-center">
-                <Container>
-                    <p>&copy; 2024 Aviation Explorer. All Rights Reserved.</p>
-                </Container>
-            </footer>
         </div>
     );
 };

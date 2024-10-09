@@ -2,11 +2,15 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Button, Form, Toast, ToastContainer } from "react-bootstrap";
 import '../../styles/Form.css';
 import AuthService from "../../services/AuthService";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showToast, setShowToast] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -16,13 +20,23 @@ const LoginForm: React.FC = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      AuthService.login(email, password).subscribe();           
-    } catch (err) {
-      setShowToast(true);
-    }
+
+    AuthService.login(email, password).subscribe({
+      next: (response) => {
+        if (response === 200) {
+          toast.success("Login successful!");
+          const from = location.state?.from || "/";
+          navigate(from);
+        } else if (response === 401) {
+          toast.error("Invalid credentials");
+        }
+      },
+      error: (err: unknown) => {
+        console.log(err);
+      }
+    });
   };
 
   return (

@@ -1,8 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
 import { AviationUser } from "../../types/AviationUser";
 import '../../styles/Form.css';
-import { Modal, Button } from 'react-bootstrap';
+import { toast } from "react-toastify";
+import UserService from "../../services/UserService";
 
 const RegistrationForm: React.FC = () => {
     const [newUser, setNewUser] = useState<AviationUser>({
@@ -12,10 +12,7 @@ const RegistrationForm: React.FC = () => {
         password: "",
         phoneNumber: undefined,
         age: undefined,
-    });
-
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const [showModal, setShowModal] = useState<boolean>(false);
+    });    
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -27,25 +24,18 @@ const RegistrationForm: React.FC = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8082/api/user', newUser);
-            localStorage.setItem('accessToken', response.data.access_token);
-            console.log('Registration successful:', response.data);
-            setNewUser({ name: "", surname: "", email: "", password: "", phoneNumber: undefined, age: undefined }); // Reset the form
-        } catch (err: any) {
-            if (err.response && err.response.status === 409) { // Assuming 409 Conflict is returned for existing email
-                setErrorMessage('Email already in use. Please use a different email.');
-                setShowModal(true); // Show the error modal
-            } else {
-                console.error(err);
+        UserService.registerUser(newUser).subscribe({
+            next: (response) => {
+              if (response === 201) {
+                toast.success("User created - you can login");
+              } else if (response === 409) {
+                toast.error("Email already exists");
+              }
+            },
+            error: (err: unknown) => {
+              console.log(err);
             }
-        }
-        console.log("Registering user:", newUser);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setErrorMessage(''); // Reset the error message
+          });
     };
 
     return (
@@ -120,19 +110,6 @@ const RegistrationForm: React.FC = () => {
                     Register
                 </button>
             </form>
-
-            {/* Modal for error message */}
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Error</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{errorMessage}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </>
     );
 };
