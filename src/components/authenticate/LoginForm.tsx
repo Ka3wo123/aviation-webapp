@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
     AuthService.login(email, password).subscribe({
       next: (response) => {
         if (response === 200) {
-          toast.success("Login successful!");
+          toast.success("Login successful!");          
           const from = location.state?.from || "/";
           navigate(from);
         } else if (response === 401) {

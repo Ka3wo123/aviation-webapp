@@ -2,27 +2,30 @@ import { useEffect, useState } from 'react';
 import { Navbar, Nav, Container, Button, Dropdown } from 'react-bootstrap';
 import logo from '../assets/images/aviation_logo.png';
 import '../styles/Navbar.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { validateJWTToken } from '../utils/CheckToken';
+import { getEmailFromToken } from '../utils/ExtractEmail';
 
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [email, setEmail] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkLogin = () => {
             const isValid = validateJWTToken();
+            setEmail(getEmailFromToken());
             setIsLoggedIn(isValid);
         };
 
         checkLogin();
     }, [isLoggedIn]);
 
-
-
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         setIsLoggedIn(false);
+        navigate('/');
         toast.success("You are logged out");
     };
 
@@ -64,14 +67,20 @@ const NavBar = () => {
                                 <Dropdown.Item href="/flights/tracker" className='text-light'>Flight Tracker</Dropdown.Item>
                                 <Dropdown.Item href="/flights/schedules" className='text-light'>Flight Schedules</Dropdown.Item>
                             </Dropdown.Menu>
-                        </Dropdown>                        
+                        </Dropdown>
+                        
+                        {isLoggedIn &&
+                        <Nav.Item>
+                            <Link to={`/user/flights/${email}`} className='nav-link text-light'>Your flights</Link>
+                        </Nav.Item>
+                        }
                     </Nav>
 
                     <Nav>
-                        {isLoggedIn ? (                            
-                                <Nav.Item>
-                                    <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
-                                </Nav.Item>                                                            
+                        {isLoggedIn ? (
+                            <Nav.Item>
+                                <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
+                            </Nav.Item>
 
                         ) : (
                             <Nav.Item>

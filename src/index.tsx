@@ -12,6 +12,7 @@ import NotFound from './components/handler-pages/NotFound';
 import HomePage from './components/HomePage';
 import AviationMap from './components/AviationMap';
 import FlightForm from './components/FlightSearch';
+import UserFlights from './components/UserFlights';
 
 
 const root = ReactDOM.createRoot(
@@ -28,6 +29,7 @@ root.render(
           <Route path='/users' element={<Users />} />
           <Route path='/airports/map' element={<AviationMap/>} />
           <Route path='/flight/assigning-form' element={<FlightForm/>} />
+          <Route path='user/flights/:email' element={<UserFlights/>} />
           <Route path='/*' element={<NotFound></NotFound>} />
         </Route>
       </Routes>

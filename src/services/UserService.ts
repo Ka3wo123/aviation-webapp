@@ -2,16 +2,16 @@ import axios, { AxiosInstance } from "axios";
 import { AviationUser } from "../types/AviationUser";
 import { from, map, Observable } from "rxjs";
 import FlightSubmission from "../types/FlightSubmission";
+import UserFlight from "../types/UserFlight";
 
 class UserService {
     constructor(private readonly _axios: AxiosInstance) { }
 
     public getUsers(): Observable<AviationUser[]> {
-        const token = localStorage.getItem('accessToken');
         return from(
             this._axios.get("/api/user/users", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.getToken()}`
                 }
             })
         ).pipe(
@@ -28,30 +28,15 @@ class UserService {
                 password: user.password,
                 phoneNumber: user?.phoneNumber,
                 age: user?.age
-            }).then(response => {
-                if (response.data._embedded && response.data._embedded.errors) {
-                    throw new Error(response.data._embedded.errors[0].message);
-                }
-
-                return response.status;
-            }).catch(err => {
-                if (err.response) {
-                    console.error("Auth failed: " + err.message || "An error occurred");
-                    return err.response.status;
-                } else {
-                    console.error("Auth failed: " + err.message);
-                }
-            })
+            }).then(response => response)
         )
     }
 
     public saveFlightForUser(flightSubmission: FlightSubmission) {
-        const token = localStorage.getItem('accessToken'); // Get the access token
-    
-        // Create the payload in the required format
         const payload = {
             email: flightSubmission.email,
             flight: {
+                airline: flightSubmission.airline,
                 departureAirport: flightSubmission.departureAirport,
                 arrivalAirport: flightSubmission.arrivalAirport,
                 flightDate: flightSubmission.flightDate,
@@ -61,20 +46,39 @@ class UserService {
                 arrivalGate: flightSubmission.arrivalGate
             }
         };
-    
+
         return from(
             this._axios.post("/api/user/flight", payload, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Set the Authorization header
+                    Authorization: `Bearer ${this.getToken()}`
                 }
             }).then(response => response.data)
-            .catch(err => {
-                console.error(err);
-                throw err; // Optionally throw the error for further handling
-            })
+                .catch(err => {
+                    console.error(err);
+                    throw err;
+                })
         );
     }
-    
+
+    public getFlightsForUser(email: string): Observable<UserFlight[]> {
+        return from(this._axios.get(`/api/user/${email}/flights`, {
+            headers: {
+                Authorization: `Bearer ${this.getToken()}`
+            }
+        }).then(
+            response => response.data
+        ).catch(
+            err => {
+                console.error(err);
+                throw err;
+            }
+        ))
+    }
+
+    private getToken(): string | null {
+        return localStorage.getItem('accessToken');
+    }
+
 }
 
 const userService = new UserService(axios.create({ baseURL: process.env.REACT_APP_IP_USERSERVICE }));

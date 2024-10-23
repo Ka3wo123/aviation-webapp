@@ -12,7 +12,7 @@ const RegistrationForm: React.FC = () => {
         password: "",
         phoneNumber: undefined,
         age: undefined,
-    });    
+    });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -26,17 +26,23 @@ const RegistrationForm: React.FC = () => {
         e.preventDefault();
         UserService.registerUser(newUser).subscribe({
             next: (response) => {
-              if (response === 201) {
-                toast.success("User created - you can login");
-              } else if (response === 409) {
-                toast.error("Email already exists");
-              }
+                if (response.status === 201) {                    
+                    toast.success("User created - you can login");
+                } else {
+                    toast.error(response.data.message);
+                }                
             },
-            error: (err: unknown) => {
-              console.log(err);
+            error: (err: any) => {
+                const errorResponse = err.response?.data;
+                if (errorResponse && errorResponse.message) {
+                    toast.error(errorResponse.message);
+                } else {
+                    toast.error("An unexpected error occurred.");
+                }
             }
-          });
+        });
     };
+
 
     return (
         <>

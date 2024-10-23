@@ -12,7 +12,6 @@ import FlightService from '../services/FlightService';
 import { formatDate } from '../utils/FormatDate';
 import airlineIcon from '../assets/icons/airplane.png';
 import { validateJWTToken } from '../utils/CheckToken';
-import userService from '../services/UserService';
 import UserService from '../services/UserService';
 import FlightSubmission from '../types/FlightSubmission';
 import { jwtDecode } from 'jwt-decode';
@@ -71,12 +70,17 @@ const FlightForm: React.FC = () => {
     };
 
     const handleSearch = () => {
-        const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;
+        const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;        
 
         FlightService.getFlights(departure?.departure.iata, arrival?.arrival.iata, formattedDate).subscribe(
             (response: any) => {
-                setRetrievedFlights(response);
-                setSearchTriggered(true);
+                if(response.length > 0) {                                        
+                    setRetrievedFlights(response);
+                    setSearchTriggered(true);
+                } else {
+                    console.log(response.length)
+                    toast.warning("No flights found")
+                }
             }
         );
     };
@@ -95,6 +99,7 @@ const FlightForm: React.FC = () => {
 
             const flightToSave: FlightSubmission = {
                 email: email || '',
+                airline: flight.airline.name,
                 departureAirport: flight.departure.airport,
                 arrivalAirport: flight.arrival.airport,
                 flightDate: flight.flightDate,

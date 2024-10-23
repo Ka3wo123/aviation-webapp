@@ -1,0 +1,17 @@
+/* src/styles/UserFlights.css */
+.user-flights-container {
+    margin-top: 20px;
+  }
+  
+  .flight-item {
+    margin-bottom: 15px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+  }
+  
+  .flight-item div {
+    margin-bottom: 10px;
+  }
+  
