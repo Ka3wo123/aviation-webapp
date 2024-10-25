@@ -73,16 +73,26 @@ const FlightForm: React.FC = () => {
         const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;        
 
         FlightService.getFlights(departure?.departure.iata, arrival?.arrival.iata, formattedDate).subscribe(
-            (response: any) => {
+            (response) => {
+                console.log(departure?.departure.iata + " " + arrival?.arrival.iata + " " + formattedDate)
                 if(response.length > 0) {                                        
                     setRetrievedFlights(response);
                     setSearchTriggered(true);
+                    console.log(response)
                 } else {
-                    console.log(response.length)
                     toast.warning("No flights found")
                 }
             }
         );
+    };
+
+    const handleClearFlights = () => {
+        setRetrievedFlights([]);
+        setSearchTriggered(false);
+        // Optionally reset the selected airports and flight date
+        setDeparture(null);
+        setArrival(null);
+        setFlightDate(undefined);
     };
 
     const handleAddToFlights = (flight: FlightData) => {
@@ -162,6 +172,9 @@ const FlightForm: React.FC = () => {
                     <Button variant="primary" type="button" onClick={handleSearch}>
                         Search
                     </Button>
+                    <Button variant="secondary" type="button" onClick={handleClearFlights} style={{ marginLeft: '10px' }}>
+                        Clear Searched Flights
+                    </Button>
                 </Form>
             </div>
 
@@ -192,7 +205,7 @@ const FlightForm: React.FC = () => {
             {searchTriggered && retrievedFlights.length > 0 && (
                 <div>
                     {retrievedFlights.map(flight => (
-                        <div className={tileStyles.container} >
+                        <div className={tileStyles.container}>
                             <h4>{flight.airline?.name || "N/A"}</h4>
                             <div className={tileStyles.arrivalDetails}>
                                 <div><strong>Origin airport:</strong> {flight.departure?.airport || "N/A"}</div>

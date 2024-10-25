@@ -20,6 +20,7 @@
     "http-proxy-middleware": "^3.0.2",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-datepicker": "^7.4.0",
@@ -59,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/leaflet-routing-machine": "^3.2.8",
     "@types/react-transition-group": "^4.4.11"
   }
 }

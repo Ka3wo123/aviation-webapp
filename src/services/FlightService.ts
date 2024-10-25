@@ -13,7 +13,7 @@ class FlightService {
             params: {
                 departureIata: originAirportIata,
                 arrivalIata: destinationAirportIata,
-                flightData: flightData
+                flightDate: flightData
             }
         })).pipe(
             map(response => response.data)
