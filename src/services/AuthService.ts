@@ -30,6 +30,35 @@ class AuthService {
         )
     }
 
+    public sendResetPasswordRequest(email: string) {
+        return from(
+            this._axios.get(`/api/email/send-reset`, {
+                params: {
+                    receiverEmail: email
+                }
+            }).then(response => {
+                console.log(response);
+            }).catch(err => {
+                console.error(err);
+            })
+        )
+    }
+
+    public getTokenByEmail(email: string | null) {
+        return from(
+            this._axios.get(`/api/email`, {
+                params: {
+                    email: email
+                }
+            }).then(response => {
+                return response.data
+            }).catch(err => {
+                console.error(err)
+            })
+        )
+
+    }
+
     private saveToken(token: string): void {
         localStorage.setItem("accessToken", token);
     }

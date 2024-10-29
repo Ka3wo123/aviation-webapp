@@ -13,6 +13,8 @@ import HomePage from './components/HomePage';
 import AviationMap from './components/AviationMap';
 import FlightForm from './components/FlightSearch';
 import UserFlights from './components/UserFlights';
+import ResetPassword from './components/handler-pages/ResetPassword';
+import ForgotPassword from './components/handler-pages/ForgotPassword';
 
 
 const root = ReactDOM.createRoot(
@@ -23,13 +25,15 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}>
-          <Route path='/' element={<HomePage/>} />         
-          <Route path='/auth' element={<AuthPage/>} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/auth' element={<AuthPage />} />
           <Route path='/register' element={<RegistrationForm />} />
           <Route path='/users' element={<Users />} />
-          <Route path='/airports/map' element={<AviationMap/>} />
-          <Route path='/flight/assigning-form' element={<FlightForm/>} />
-          <Route path='user/flights/:email' element={<UserFlights/>} />
+          <Route path='/airports/map' element={<AviationMap />} />
+          <Route path='/flight/assigning-form' element={<FlightForm />} />
+          <Route path='/user/flights/:email' element={<UserFlights />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path='/*' element={<NotFound></NotFound>} />
         </Route>
       </Routes>

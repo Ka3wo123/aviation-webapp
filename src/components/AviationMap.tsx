@@ -80,6 +80,7 @@ const MapComponent = () => {
             );
 
         });
+
         setFilteredAirports(filtered);
     }, [airportSearchTerm, countrySearchTerm, citySearchTerm, markers, radius]);
 

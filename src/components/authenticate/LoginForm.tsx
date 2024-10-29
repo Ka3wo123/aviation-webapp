@@ -4,6 +4,7 @@ import '../../styles/Form.css';
 import AuthService from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -26,7 +27,7 @@ const LoginForm: React.FC = () => {
     AuthService.login(email, password).subscribe({
       next: (response) => {
         if (response === 200) {
-          toast.success("Login successful!");          
+          toast.success("Login successful!");
           const from = location.state?.from || "/";
           navigate(from);
         } else if (response === 401) {
@@ -62,6 +63,7 @@ const LoginForm: React.FC = () => {
             required
           />
         </Form.Group>
+        <Link to={'/forgot-password'} style={{color: '#fff', textDecoration: 'none'}}>Forgot password?</Link>
 
         <Button variant="primary" type="submit">
           Login
