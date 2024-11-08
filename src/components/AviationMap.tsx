@@ -11,6 +11,7 @@ import AirportService from '../services/AirportService';
 import Airport from '../types/Airport';
 import AirportDetails from './AirportDetails';
 import '../styles/AviationMap.css';
+import { toast } from 'react-toastify';
 
 const MapComponent = () => {
     const [markers, setMarkers] = useState<AirportMarker[]>([]);
@@ -57,6 +58,7 @@ const MapComponent = () => {
             },
             error: (err: unknown) => {
                 console.error(err);
+                toast.error("Cannot load airports. Internal server error")
             }
         });
 

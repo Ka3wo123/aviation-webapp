@@ -39,9 +39,12 @@ class AuthService {
             }).then(response => {
                 console.log(response);
             }).catch(err => {
-                console.error(err);
+                if(err.status === 404) {
+                    throw {status: 404, message: "The submitted credentials are not connected to an existing user."};
+                }
+                throw err;
             })
-        )
+        );
     }
 
     public getTokenByEmail(email: string | null) {

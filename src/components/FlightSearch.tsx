@@ -28,12 +28,14 @@ const FlightForm: React.FC = () => {
     const [searchTriggered, setSearchTriggered] = useState<boolean>(false);
     const [retrievedFlights, setRetrievedFlights] = useState<FlightData[]>([]);
     const [isValidToken, setIsValidToken] = useState<boolean>(validateJWTToken());
-    const [flightSubmission, setFlightSubmission] = useState<FlightSubmission>();
 
     useEffect(() => {
-        AirportService.getAirports().subscribe(airports => {
-            airports = airports.sort((a, b) => a.airportName.localeCompare(b.airportName));
-            setAirports(airports);
+        AirportService.getAirports().subscribe({
+            next: (airports) => {
+                airports = airports.sort((a, b) => a.airportName.localeCompare(b.airportName));
+                setAirports(airports)
+            },
+            error: (err) => toast.error("Cannot load flights. Internal server error")
         });
     }, []);
 
@@ -70,26 +72,24 @@ const FlightForm: React.FC = () => {
     };
 
     const handleSearch = () => {
-        const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;        
+        const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;
 
-        FlightService.getFlights(departure?.departure.iata, arrival?.arrival.iata, formattedDate).subscribe(
-            (response) => {
-                console.log(departure?.departure.iata + " " + arrival?.arrival.iata + " " + formattedDate)
-                if(response.length > 0) {                                        
+        FlightService.getFlights(departure?.departure.iata, arrival?.arrival.iata, formattedDate).subscribe({
+            next: (response) => {
+                if (response.length > 0) {
                     setRetrievedFlights(response);
                     setSearchTriggered(true);
-                    console.log(response)
                 } else {
                     toast.warning("No flights found")
                 }
-            }
-        );
+            }, 
+            error: (err) => toast.error("This operation is not available")
+        });
     };
 
     const handleClearFlights = () => {
         setRetrievedFlights([]);
         setSearchTriggered(false);
-        // Optionally reset the selected airports and flight date
         setDeparture(null);
         setArrival(null);
         setFlightDate(undefined);
@@ -98,7 +98,7 @@ const FlightForm: React.FC = () => {
     const handleAddToFlights = (flight: FlightData) => {
         if (!isValidToken) {
             navigate('/auth', { state: { from: location } });
-        } else {            
+        } else {
             const token = localStorage.getItem("accessToken");
             let email: string | undefined;
 
@@ -118,9 +118,10 @@ const FlightForm: React.FC = () => {
                 arrivalTerminal: flight.arrival.terminal,
                 arrivalGate: flight.arrival.gate
             };
-            
-            UserService.saveFlightForUser(flightToSave).subscribe(() => {
-                toast.success(`Added flight from ${flightToSave.departureAirport} to ${flightToSave.arrivalAirport} for user ${email}`)
+
+            UserService.saveFlightForUser(flightToSave).subscribe({
+                next: () => toast.success(`Added flight from ${flightToSave.departureAirport} to ${flightToSave.arrivalAirport} for user ${email}`),
+                error: (err) => toast.error("This operation is not available")
             });
         }
     };

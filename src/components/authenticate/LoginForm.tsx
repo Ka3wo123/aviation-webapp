@@ -32,6 +32,8 @@ const LoginForm: React.FC = () => {
           navigate(from);
         } else if (response === 401) {
           toast.error("Invalid credentials");
+        } else if (response === 500) {
+          toast.error("Internal server error");
         }
       },
       error: (err: unknown) => {

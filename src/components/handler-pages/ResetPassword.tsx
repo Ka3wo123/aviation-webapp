@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authService from '../../services/AuthService';
-import '../../styles/ResetPassword.css'; // Import the CSS file
+import { Form, Button } from 'react-bootstrap';
+import '../../styles/ResetPassword.css';
+import userService from '../../services/UserService';
+import { error } from 'console';
+import { toast } from 'react-toastify';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -40,41 +44,42 @@ const ResetPassword = () => {
     checkTokenValidity();
   }, [token, navigate]);
 
-  const handleResetPassword = async () => {
-    if (email && newPassword) {
-      // Here you would call the appropriate service to reset the password
-      try {
-        // Example: await authService.resetPassword(email, newPassword, token);
-        setMessage('Your password has been reset successfully.');
-        // Optionally, navigate to another page after successful reset
-        navigate('/');
-      } catch (error) {
-        console.error("Error resetting password:", error);
-        setMessage('Failed to reset password. Please try again.');
-      }
-    } else {
-      setMessage('Please fill in all fields.');
-    }
+  const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    userService.setNewPassword(email!, newPassword).subscribe({
+      next: () => navigate('/'),
+      error: (err) => toast.error(err.message)
+    });
   };
+
 
   return (
     <div className="reset-password-container">
-      <h2>Reset Your Password</h2>
-      {email && <p className="email">Your email: {email}</p>}
-      {!email && <p>Please provide a valid email to reset your password.</p>}
-      {isTokenValid === false && <p>Your token is invalid. Please request a new one.</p>}
-      
+      <h2>Password Recovery</h2>
       {isTokenValid && (
-        <div className="input-container">
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <button onClick={handleResetPassword}>Reset Password</button>
+        <Form className="input-container" onSubmit={handleResetPassword}>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              value={email || ''}
+              readOnly
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>New Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit">Reset Password</Button>
           {message && <p>{message}</p>}
-        </div>
+        </Form>
       )}
     </div>
   );

@@ -32,6 +32,22 @@ class UserService {
         )
     }
 
+    public setNewPassword(email: string, password: string) {
+        return from(
+            this._axios.patch(`/api/user/update-password`, {
+                email: email,
+                password: password
+            }).then(response => response)
+                .catch(err => {
+                    if (err.status === 400) {
+                        throw { status: 400, message: "Password violations" };
+                    } else {
+                        throw err;
+                    }
+                })
+        )
+    }
+
     public saveFlightForUser(flightSubmission: FlightSubmission) {
         const payload = {
             email: flightSubmission.email,
@@ -52,11 +68,13 @@ class UserService {
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`
                 }
-            }).then(response => response.data)
-                .catch(err => {
-                    console.error(err);
-                    throw err;
-                })
+            }
+            ).then(
+                response => response.data
+            ).catch(err => {
+                console.error(err);
+                throw err;
+            })
         );
     }
 
