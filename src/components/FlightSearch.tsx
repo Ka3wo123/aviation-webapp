@@ -11,6 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import FlightService from '../services/FlightService';
 import { formatDate } from '../utils/FormatDate';
 import airlineIcon from '../assets/icons/airplane.png';
+import terminalImage from '../assets/images/flights.jpg';
 import { validateJWTToken } from '../utils/CheckToken';
 import UserService from '../services/UserService';
 import FlightSubmission from '../types/FlightSubmission';
@@ -82,7 +83,7 @@ const FlightForm: React.FC = () => {
                 } else {
                     toast.warning("No flights found")
                 }
-            }, 
+            },
             error: (err) => toast.error("This operation is not available")
         });
     };
@@ -108,7 +109,7 @@ const FlightForm: React.FC = () => {
             }
 
             const flightToSave: FlightSubmission = {
-                email: email || '',
+                email: email || '',                
                 airline: flight.airline.name,
                 departureAirport: flight.departure.airport,
                 arrivalAirport: flight.arrival.airport,
@@ -130,6 +131,8 @@ const FlightForm: React.FC = () => {
         <>
             <div className={styles.form}>
                 <h2 className={styles.header}>Search flight</h2>
+                <img src={terminalImage} alt="Flight Search" style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', marginBottom: '20px' }} />
+
                 <Form>
                     <Form.Group className="mb-3" controlId="formAssignedTo">
                         <Form.Label>Origin airport</Form.Label>

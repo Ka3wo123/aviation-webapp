@@ -43,7 +43,7 @@ const AirportDetails = ({ show, handleClose, airportName, airportIata }: Airport
 
 
     const handleFlightPick = (flightData: FlightData) => {
-        navigate('/flight/assigning-form', { state: { flightData: flightData } });
+        navigate('/flight/search', { state: { flightData: flightData } });
     };
 
     return (

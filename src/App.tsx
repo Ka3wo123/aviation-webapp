@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
 
   const location = useLocation();
-  const hiddenFooterPaths = ['/airports/map', '/flight/assigning-form'];
+  const hiddenFooterPaths = ['/airports/map', '/flight/search'];
   const isFooterHidden = hiddenFooterPaths.includes(location.pathname);
 
   return (

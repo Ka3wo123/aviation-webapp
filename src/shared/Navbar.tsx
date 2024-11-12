@@ -45,34 +45,20 @@ const NavBar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} className='text-light'>Airports</Dropdown.Toggle>
-                            <Dropdown.Menu className="custom-dropdown-menu">
-                                <Dropdown.Item href="/airports/list" className='text-light'>Airport List</Dropdown.Item>
-                                <Dropdown.Item href="/airports/map" className='text-light'>Airport Map</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Dropdown as={Nav.Item} >
-                            <Dropdown.Toggle as={Nav.Link} className='text-light'>Airlines</Dropdown.Toggle>
-                            <Dropdown.Menu className="custom-dropdown-menu">
-                                <Dropdown.Item href="/airlines/list" className='text-light'>Airline List</Dropdown.Item>
-                                <Dropdown.Item href="/airlines/fleet" className='text-light'>Fleet Information</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Dropdown as={Nav.Item}>
-                            <Dropdown.Toggle as={Nav.Link} className='text-light'>Flights</Dropdown.Toggle>
-                            <Dropdown.Menu className="custom-dropdown-menu">
-                                <Dropdown.Item href="/flights/tracker" className='text-light'>Flight Tracker</Dropdown.Item>
-                                <Dropdown.Item href="/flights/schedules" className='text-light'>Flight Schedules</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        
-                        {isLoggedIn &&
                         <Nav.Item>
-                            <Link to={`/user/flights/${email}`} className='nav-link text-light'>Your flights</Link>
+                            <Link to={`/airlines`} className='nav-link text-light'>Airlines</Link>
                         </Nav.Item>
+                        <Nav.Item>
+                            <Link to={`/airports/map`} className='nav-link text-light'>Airports map</Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to={`/flight/search`} className='nav-link text-light'>Flights search</Link>
+                        </Nav.Item>
+
+                        {isLoggedIn &&
+                            <Nav.Item>
+                                <Link to={`/user/flights/${email}`} className='nav-link text-light'>Your flights</Link>
+                            </Nav.Item>
                         }
                     </Nav>
 

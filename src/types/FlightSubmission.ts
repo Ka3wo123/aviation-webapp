@@ -1,5 +1,5 @@
 export default interface FlightSubmission {
-    email: string,
+    email: string,    
     airline: string,
     departureAirport: string,
     arrivalAirport: string,

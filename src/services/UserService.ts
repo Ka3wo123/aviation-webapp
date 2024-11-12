@@ -78,6 +78,14 @@ class UserService {
         );
     }
 
+    public deleteFlight(email: string | undefined, flightId: number) {
+        return from(this._axios.delete(`/api/user/${email}/flight/${flightId}`, {
+            headers: {
+                Authorization: `Bearer ${this.getToken()}`
+            }
+        }));
+    };
+
     public getFlightsForUser(email: string): Observable<UserFlight[]> {
         return from(this._axios.get(`/api/user/${email}/flights`, {
             headers: {

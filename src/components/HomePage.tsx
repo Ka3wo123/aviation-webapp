@@ -1,9 +1,6 @@
-import React from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import airportMap from '../assets/images/airports_map.png';
-import airports from '../assets/images/airport.jpg';
 import airlines from '../assets/images/airlines.jpg';
-import flights from '../assets/images/flights.jpg';
 import ticket from '../assets/images/airline-tickets.webp';
 import '../styles/HomePage.css';
 import { Link } from 'react-router-dom';
@@ -28,7 +25,11 @@ const HomePage = () => {
                                 <Card.Text>
                                     Get familiar with airlines You want to fly.
                                 </Card.Text>
-                                <Button variant="outline-primary">Learn More</Button>
+                                <Button variant="outline-primary">
+                                    <Link to={"/airlines"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        Search airlines
+                                    </Link>
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -49,69 +50,23 @@ const HomePage = () => {
                             </Card.Body>
                         </Card>
                     </Col>
-
-                    <Col md={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={flights} alt="Flights" className="card-img-top" />
-                            <Card.Body>
-                                <Card.Title>Flights</Card.Title>
-                                <Card.Text>
-                                    Track real-time flight information.
-                                </Card.Text>
-                                <Button variant="outline-primary">Track Flights</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={airlines} alt="Airlines" className="card-img-top" />
-                            <Card.Body>
-                                <Card.Title>Airlines</Card.Title>
-                                <Card.Text>
-                                    Get familiar with airlines You want to fly.
-                                </Card.Text>
-                                <Button variant="outline-primary">Learn More</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                    <Col md={4} className="mb-4">
-                        <Card>
-                            <Card.Img variant="top" src={airports} alt="Airports" className="card-img-top" />
-                            <Card.Body>
-                                <Card.Title>Airports map</Card.Title>
-                                <Card.Text>
-                                    Find airports on the entire world.
-                                </Card.Text>
-                                <Button variant="outline-primary">
-                                    <Link to={"/airports/map"} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        Find airports
-                                    </Link>
-                                </Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
                     <Col md={4} className="mb-4">
                         <Card>
                             <Card.Img variant="top" src={ticket} alt="Flights" className="card-img-top" />
                             <Card.Body>
-                                <Card.Title>Tickets</Card.Title>
+                                <Card.Title>Flights</Card.Title>
                                 <Card.Text>
                                     Find Your flight to destination.
                                 </Card.Text>
                                 <Button variant="outline-primary">
-                                    <Link to={"/flight/assigning-form"} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        Book flight
+                                    <Link to={"/flight/search"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        Search flights
                                     </Link>
                                 </Button>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-
             </Container>
         </div>
     );

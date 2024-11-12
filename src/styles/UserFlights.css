@@ -1,17 +1,61 @@
-/* src/styles/UserFlights.css */
 .user-flights-container {
-    margin-top: 20px;
-  }
-  
-  .flight-item {
-    margin-bottom: 15px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 5px;
-  }
-  
-  .flight-item div {
-    margin-bottom: 10px;
-  }
-  
+  max-width: 800px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-flights-container h2 {
+  text-align: center;
+  font-weight: bold;
+  color: #343a40;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+  justify-content: center;
+}
+
+.nav-tabs .nav-link {
+  border: 1px solid #dee2e6;
+  border-bottom-color: transparent;
+  background-color: #ffffff;
+  color: #495057;
+  font-weight: bold;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #0d6efd;
+  color: #ffffff; 
+  border-color: #0d6efd;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: #e9ecef;
+  color: #0d6efd;
+}
+
+.tab-content {
+  padding: 15px;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  background-color: #ffffff;
+  border-radius: 0 0 8px 8px;
+}
+
+.alert {
+  text-align: center;
+  font-style: italic;
+}
+
+.list-group-item {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-group-item strong {
+  color: #0d6efd;
+}
