@@ -5,6 +5,7 @@ import AuthService from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -26,18 +27,27 @@ const LoginForm: React.FC = () => {
 
     AuthService.login(email, password).subscribe({
       next: (response) => {
-        if (response === 200) {
-          toast.success("Login successful!");
-          const from = location.state?.from || "/";
-          navigate(from);
-        } else if (response === 401) {
-          toast.error("Invalid credentials");
-        } else if (response === 500) {
-          toast.error("Internal server error");
+        const { access_token } = response.data;
+        const decoded: { roles?: string } = jwtDecode(access_token);
+        if (decoded.roles?.includes('ADMIN')) {
+          window.open('/admin-dashboard', '_blank')          
         }
+        toast.success("Login successful!");
+        const from = location.state?.from || "/";
+        navigate(from);
+
       },
-      error: (err: unknown) => {
-        console.log(err);
+      error: (err: any) => {
+        if (err.response?.data?._embedded?.errors) {
+          const errorMessage = err.response.data._embedded.errors[0]?.message + ". Contact with administrator for more information." || "An error occurred";
+          toast.error(errorMessage);
+        } else if (err.status === 401) {
+          toast.error("Invalid credentials");
+        } else if (err.status === 500) {
+          toast.error("Internal server error");
+        } else {
+          toast.error("An unexpected error occurred");
+        }
       }
     });
   };
@@ -65,7 +75,7 @@ const LoginForm: React.FC = () => {
             required
           />
         </Form.Group>
-        <Link to={'/forgot-password'} style={{color: '#fff', textDecoration: 'none'}}>Forgot password?</Link>
+        <Link to={'/forgot-password'} style={{ color: '#fff', textDecoration: 'none' }}>Forgot password?</Link>
 
         <Button variant="primary" type="submit">
           Login

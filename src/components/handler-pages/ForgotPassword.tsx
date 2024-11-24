@@ -4,8 +4,7 @@ import authService from '../../services/AuthService';
 import styles from '../../styles/ForgotPassword.module.css';
 import { toast } from 'react-toastify';
 
-const ForgotPassword = () => {
-    const navigate = useNavigate();
+const ForgotPassword = () => {    
     const [email, setEmail] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,12 +14,12 @@ const ForgotPassword = () => {
         localStorage.setItem("receiverEmail", email);
 
         response.subscribe({
-            next: () => toast.success("Password recovery link was sent to your inbox"),
+            next: () => toast.success("Password recovery link was sent to your inbox."),
             error: (err) => {
                 if (err.status === 404) {
                     toast.error("The submitted credentials are not connected to an existing user.");
                 } else {
-                    toast.error("Failed to send password reset email. Please try again.");
+                    toast.error("Internal server error. Try later.");
                 }
             }
         });

@@ -1,6 +1,5 @@
 import axios, { Axios } from "axios";
 import { from, map, Observable } from "rxjs";
-import Airport from "../types/Airport";
 import Airline from "../types/Airline";
 
 class AirlineService {

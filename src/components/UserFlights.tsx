@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Tabs, Tab, Container, Spinner, Alert, ListGroup, Row, Col, Button } from 'react-bootstrap';
+import { Tabs, Tab, Container, Alert, ListGroup, Row, Col, Button } from 'react-bootstrap';
 import '../styles/UserFlights.css';
 import UserFlight from '../types/UserFlight';
 import userService from '../services/UserService';
 import { toast } from 'react-toastify';
+import airplaneIcon from '../assets/icons/airplane.png';
 
 const UserFlights = () => {
     const { email } = useParams<{ email: string }>();
@@ -30,7 +31,7 @@ const UserFlights = () => {
     const deleteFlight = (email: string | undefined, flightId: number) => {
         userService.deleteFlight(email, flightId).subscribe({
             next: () => {
-                toast.success("Flight deleted successfully!");                
+                toast.success("Flight deleted successfully!");
                 setFlights(flights.filter(flight => flight.id === flightId));
                 setCurrentFlights(currentFlights.filter(flight => flight.id !== flightId));
                 setArchivedFlights(archivedFlights.filter(flight => flight.id !== flightId));
@@ -50,17 +51,36 @@ const UserFlights = () => {
                         <div><strong>Airline:</strong> {flight.airline}</div>
                         <Row>
                             <Col><strong>Origin:</strong> {flight.departureAirport}</Col>
+                            <img
+                                src={airplaneIcon}
+                                alt='Airplane icon'
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    objectFit: 'contain',
+                                    marginRight: '20%',
+                                }}
+                            />
                             <Col><strong>Destination:</strong> {flight.arrivalAirport}</Col>
                         </Row>
+
                         <Row className="mt-2">
                             <Col><strong>Departure Date:</strong> {new Date(flight.flightDate).toLocaleString()}</Col>
+                        </Row>
+                        <Row>
+                            <Col><strong>Arrival gate:</strong> {flight.arrivalGate || "N/A"}</Col>
+                            <Col><strong>Arrival terminal:</strong> {flight.arrivalTerminal || "N/A"}</Col>
+                        </Row>
+                        <Row>
+                            <Col><strong>Departure gate:</strong> {flight.departureGate || "N/A"}</Col>
+                            <Col><strong>Departure terminal:</strong> {flight.departureTerminal || "N/A"}</Col>
                         </Row>
                         <Button
                             variant="danger"
                             className="mt-2"
                             onClick={() => deleteFlight(email, flight.id)}
                         >
-                            Delete Flight
+                            Remove your flight
                         </Button>
                     </div>
                 </ListGroup.Item>

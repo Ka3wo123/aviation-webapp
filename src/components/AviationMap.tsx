@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L, { Icon } from 'leaflet';
+import { Icon } from 'leaflet';
 import 'leaflet-routing-machine';
 import AirportMarker, { toLatLngTuple } from '../types/Marker';
 import customMarkerIcon from '../assets/icons/location-pin.png';
@@ -58,7 +58,7 @@ const MapComponent = () => {
             },
             error: (err: unknown) => {
                 console.error(err);
-                toast.error("Cannot load airports. Internal server error")
+                toast.error("Cannot load airports. Internal server error.")
             }
         });
 
@@ -72,6 +72,7 @@ const MapComponent = () => {
         const lowercasedCityTerm = citySearchTerm.toLowerCase();
         const lowercasedCountryTerm = countrySearchTerm.toLowerCase();
 
+        
         const filtered = markers.filter(marker => {
             const isWithin = radius > 0 && userLocation ? calculateDistance(userLocation, toLatLngTuple(marker.geocode)) <= radius : true;
             return (
@@ -80,8 +81,8 @@ const MapComponent = () => {
                 (marker.countryName ? marker.countryName?.toLowerCase().includes(lowercasedCountryTerm) : true) &&
                 isWithin
             );
-
-        });
+            
+        });        
 
         setFilteredAirports(filtered);
     }, [airportSearchTerm, countrySearchTerm, citySearchTerm, markers, radius]);

@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Navbar, Nav, Container, Button, Dropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import logo from '../assets/images/aviation_logo.png';
-import '../styles/Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { validateJWTToken } from '../utils/CheckToken';
 import { getEmailFromToken } from '../utils/ExtractEmail';
+import authService from '../services/AuthService';
 
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [email, setEmail] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(() => {    
+        authService.authState$.subscribe(status => setIsLoggedIn(status));    
         const checkLogin = () => {
             const isValid = validateJWTToken();
             setEmail(getEmailFromToken());
@@ -23,8 +24,7 @@ const NavBar = () => {
     }, [isLoggedIn]);
 
     const handleLogout = () => {
-        localStorage.removeItem("accessToken");
-        setIsLoggedIn(false);
+        authService.logout();        
         navigate('/');
         toast.success("You are logged out");
     };

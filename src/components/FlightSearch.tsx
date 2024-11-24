@@ -17,6 +17,7 @@ import UserService from '../services/UserService';
 import FlightSubmission from '../types/FlightSubmission';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
+import ExceptionResponse from '../types/exceptions/ExceptionResponse';
 
 const FlightForm: React.FC = () => {
     const location = useLocation();
@@ -111,6 +112,7 @@ const FlightForm: React.FC = () => {
             const flightToSave: FlightSubmission = {
                 email: email || '',                
                 airline: flight.airline.name,
+                flightId: flight.id.$oid,
                 departureAirport: flight.departure.airport,
                 arrivalAirport: flight.arrival.airport,
                 flightDate: flight.flightDate,
@@ -120,9 +122,16 @@ const FlightForm: React.FC = () => {
                 arrivalGate: flight.arrival.gate
             };
 
+
             UserService.saveFlightForUser(flightToSave).subscribe({
                 next: () => toast.success(`Added flight from ${flightToSave.departureAirport} to ${flightToSave.arrivalAirport} for user ${email}`),
-                error: (err) => toast.error("This operation is not available")
+                error: (err: ExceptionResponse) => {
+                    if(err.status === 409) {
+                        toast.warning("User already assigned to this flight");
+                    } else {
+                        toast.error(err.message);
+                    }
+                }
             });
         }
     };

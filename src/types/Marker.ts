@@ -1,5 +1,4 @@
-import { latLng, LatLngExpression } from "leaflet";
-import Airport from "./Airport";
+import { LatLngExpression } from "leaflet";
 
 export default interface AirportMarker {
     geocode: LatLngExpression,    

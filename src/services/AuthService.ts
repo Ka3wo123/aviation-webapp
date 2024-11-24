@@ -1,7 +1,10 @@
 import axios, { Axios } from "axios";
-import { from } from "rxjs";
+import { BehaviorSubject, from, tap } from "rxjs";
 
 class AuthService {
+    private authSubject = new BehaviorSubject<boolean>(false);
+    authState$ = this.authSubject.asObservable();
+
     constructor(
         private readonly _axios: Axios
     ) { }
@@ -12,20 +15,13 @@ class AuthService {
                 username: email,
                 password: password
             }).then(response => {
-                if (response.data._embedded && response.data._embedded.errors) {
-                    throw new Error(response.data._embedded.errors[0].message);
-                }
-
                 const { access_token } = response.data;
                 this.saveToken(access_token);
-                return response.status;
-            }).catch(err => {
-                if (err.response) {
-                    console.error("Auth failed: " + err.message || "An error occurred");
-                    return err.response.status;
-                } else {
-                    console.error("Auth failed: " + err.message);
-                }
+                return response;
+            })
+        ).pipe(
+            tap(() => {
+                this.authSubject.next(true);
             })
         )
     }
@@ -39,8 +35,8 @@ class AuthService {
             }).then(response => {
                 console.log(response);
             }).catch(err => {
-                if(err.status === 404) {
-                    throw {status: 404, message: "The submitted credentials are not connected to an existing user."};
+                if (err.status === 404) {
+                    throw { status: 404, message: "The submitted credentials are not connected to an existing user." };
                 }
                 throw err;
             })
@@ -60,6 +56,12 @@ class AuthService {
             })
         )
 
+    }
+
+    public logout() {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('receiverEmail');
+        this.authSubject.next(false);
     }
 
     private saveToken(token: string): void {

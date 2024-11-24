@@ -1,4 +1,27 @@
 .card-img-top {
     height: 200px;
-    object-fit: cover; 
+    object-fit: cover;
+}
+
+.app-availability {
+    background-color: #f8f9fa;
+    border: 1px dashed #4e4d64;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px #0000001a;
+    margin: 18px;
+}
+
+.app-availability h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.app-icon {
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.app-icon:hover {
+    color: #007bff;
 }

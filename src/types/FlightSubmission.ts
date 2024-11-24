@@ -1,5 +1,10 @@
+export type FlightId = {
+    $oid: string, 
+}
+
 export default interface FlightSubmission {
-    email: string,    
+    email: string,  
+    flightId: string,  
     airline: string,
     departureAirport: string,
     arrivalAirport: string,

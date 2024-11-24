@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { AviationUser } from "../../types/AviationUser";
+import { AviationUser, Role } from "../../types/AviationUser";
 import '../../styles/Form.css';
 import { toast } from "react-toastify";
 import UserService from "../../services/UserService";
@@ -12,6 +12,7 @@ const RegistrationForm: React.FC = () => {
         password: "",
         phoneNumber: undefined,
         age: undefined,
+        role: Role.USER      
     });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

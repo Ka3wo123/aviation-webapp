@@ -3,6 +3,10 @@ import { AviationUser } from "../types/AviationUser";
 import { from, map, Observable } from "rxjs";
 import FlightSubmission from "../types/FlightSubmission";
 import UserFlight from "../types/UserFlight";
+import FlightPayload from "../types/FlightPayload";
+import ExceptionResponse from "../types/exceptions/ExceptionResponse";
+import UserAirlineRatio from "../types/stats/UserAirlineRatio";
+import CreatedAtUser from "../types/stats/CreatedAtUser";
 
 class UserService {
     constructor(private readonly _axios: AxiosInstance) { }
@@ -10,6 +14,54 @@ class UserService {
     public getUsers(): Observable<AviationUser[]> {
         return from(
             this._axios.get("/api/user/users", {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        ).pipe(
+            map(response => response.data)
+        )
+    }    
+
+    public getUserAirlineRatio(): Observable<UserAirlineRatio[]> {
+        return from(
+            this._axios.get("/api/user-stats/airline", {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        ).pipe(
+            map(response => response.data)
+        )
+    }
+
+    public getBlockedUsersCount(): Observable<number> {
+        return from(
+            this._axios.get("/api/user-stats/blocked", {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        ).pipe(
+            map(response => response.data)
+        )
+    }
+
+    public getCreatedAtUsers(): Observable<CreatedAtUser[]> {
+        return from(
+            this._axios.get("/api/user-stats/created", {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        ).pipe(
+            map(response => response.data)
+        )
+    }
+
+    public getOneByEmail(email: string): Observable<AviationUser> {
+        return from(
+            this._axios.get(`/api/user/${email}`, {
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`
                 }
@@ -27,7 +79,8 @@ class UserService {
                 email: user.email,
                 password: user.password,
                 phoneNumber: user?.phoneNumber,
-                age: user?.age
+                age: user?.age,
+                role: user?.role
             }).then(response => response)
         )
     }
@@ -48,11 +101,37 @@ class UserService {
         )
     }
 
+    public setUserStatus(email: string, toBlock: boolean | undefined) {
+        return from(
+            this._axios.patch(`/api/user/${email}/status`, {
+                toBlock: toBlock
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            }).then(response => console.log(response))
+                .catch(err => {
+                    throw err;
+                })
+        )
+    }
+
+    public deleteUser(email: string) {
+        return from(
+            this._axios.delete(`/api/user/${email}`, {
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        )
+    }
+
     public saveFlightForUser(flightSubmission: FlightSubmission) {
-        const payload = {
+        const payload: FlightPayload = {
             email: flightSubmission.email,
             flight: {
                 airline: flightSubmission.airline,
+                flightId: flightSubmission.flightId,
                 departureAirport: flightSubmission.departureAirport,
                 arrivalAirport: flightSubmission.arrivalAirport,
                 flightDate: flightSubmission.flightDate,
@@ -71,9 +150,10 @@ class UserService {
             }
             ).then(
                 response => response.data
-            ).catch(err => {
-                console.error(err);
-                throw err;
+            ).catch((err: ExceptionResponse) => {
+                if (err.status === 409) {
+                    throw { status: err.status, message: err.message }
+                }
             })
         );
     }

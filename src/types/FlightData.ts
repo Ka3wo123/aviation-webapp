@@ -2,6 +2,7 @@ import Airline from "./Airline";
 import AirlineFlight from "./AirlineFlight";
 import Arrival from "./Arrival";
 import Departure from "./Departure";
+import { FlightId } from "./FlightSubmission";
 import LiveFlight from "./LiveFlight";
 
 type Flight = {
@@ -11,10 +12,11 @@ type Flight = {
 
 }
 
-export default interface FlightData {
+export default interface FlightData {    
     flightDate: string,
     flightStatus: string,
     departure: Departure,
+    id: FlightId,
     flight: Flight,
     arrival: Arrival,
     airline: AirlineFlight,

@@ -4,6 +4,7 @@ import airlines from '../assets/images/airlines.jpg';
 import ticket from '../assets/images/airline-tickets.webp';
 import '../styles/HomePage.css';
 import { Link } from 'react-router-dom';
+import { FaGooglePlay, FaApple } from 'react-icons/fa';
 
 const HomePage = () => {
     return (
@@ -12,6 +13,24 @@ const HomePage = () => {
                 <Container>
                     <h1 className="display-4">Aviation Explorer</h1>
                     <p className="lead">Discover the world's airlines, airports, and flights with ease.</p>
+                </Container>
+            </div>
+
+            <div className="app-availability text-center py-4">
+                <Container>
+                    <h3>Android and iOS app available</h3>
+                    <Row className="justify-content-center">
+                        <Col xs="auto" className="mb-3">
+                            <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
+                                <FaGooglePlay className="app-icon" size={50} />
+                            </a>
+                        </Col>
+                        <Col xs="auto" className="mb-3">
+                            <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer">
+                                <FaApple className="app-icon" size={50} />
+                            </a>
+                        </Col>
+                    </Row>
                 </Container>
             </div>
 

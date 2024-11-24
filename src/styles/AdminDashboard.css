@@ -1,0 +1,86 @@
+.admin-dashboard {
+    padding: 30px;
+    background-color: #f4f6f8;
+    min-height: 100vh;
+}
+
+.dashboard-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.user-list {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.user-item {
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.admin-item {
+    background-color: #dadada;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.user-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-item:hover {
+    background-color: #ebebeb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-actions {
+    align-items: center;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+.user-details,
+.user-flights {
+    margin-top: 20px;
+}
+
+.flight-header {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+.ant-collapse-header {
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+
+.even-row {
+    background-color: #ffffff;
+}
+
+.odd-row {
+    background-color: #ebebeb;
+}
