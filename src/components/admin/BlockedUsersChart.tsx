@@ -9,7 +9,7 @@ const BlockedUsersChart = ({ data }: any) => {
     ];
 
     return (
-        <PieChart width={400} height={300}>
+        <PieChart width={400} height={300} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <Pie
                 data={chartData}
                 dataKey="value"
