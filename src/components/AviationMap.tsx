@@ -72,7 +72,7 @@ const MapComponent = () => {
         const lowercasedCityTerm = citySearchTerm.toLowerCase();
         const lowercasedCountryTerm = countrySearchTerm.toLowerCase();
 
-        
+
         const filtered = markers.filter(marker => {
             const isWithin = radius > 0 && userLocation ? calculateDistance(userLocation, toLatLngTuple(marker.geocode)) <= radius : true;
             return (
@@ -81,8 +81,8 @@ const MapComponent = () => {
                 (marker.countryName ? marker.countryName?.toLowerCase().includes(lowercasedCountryTerm) : true) &&
                 isWithin
             );
-            
-        });        
+
+        });
 
         setFilteredAirports(filtered);
     }, [airportSearchTerm, countrySearchTerm, citySearchTerm, markers, radius]);
@@ -112,7 +112,8 @@ const MapComponent = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 {filteredAirports.map((marker, index) => (
-                    <Marker
+                    <Marker                                     
+                        data-testid={marker.airportName}
                         key={index}
                         position={marker.geocode}
                         icon={airportMarker}

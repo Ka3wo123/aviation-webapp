@@ -7,6 +7,7 @@ import FlightPayload from "../types/FlightPayload";
 import ExceptionResponse from "../types/exceptions/ExceptionResponse";
 import UserAirlineRatio from "../types/stats/UserAirlineRatio";
 import CreatedAtUser from "../types/stats/CreatedAtUser";
+import AviationUserPageable from "../types/AviationUserPageable";
 
 class UserService {
     constructor(private readonly _axios: AxiosInstance) { }
@@ -21,7 +22,23 @@ class UserService {
         ).pipe(
             map(response => response.data)
         )
-    }    
+    } 
+    
+    public getUsersPageable(page: number, size: number): Observable<AviationUserPageable> {
+        return from(
+            this._axios.get("/api/user/users", {
+                params: {
+                    page: page - 1,
+                    size: size
+                },
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`
+                }
+            })
+        ).pipe(
+            map(response => response.data)
+        )
+    }  
 
     public getUserAirlineRatio(): Observable<UserAirlineRatio[]> {
         return from(

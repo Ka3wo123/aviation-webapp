@@ -18,6 +18,7 @@ import FlightSubmission from '../types/FlightSubmission';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 import ExceptionResponse from '../types/exceptions/ExceptionResponse';
+import { format } from 'date-fns';
 
 const FlightForm: React.FC = () => {
     const location = useLocation();
@@ -74,7 +75,7 @@ const FlightForm: React.FC = () => {
     };
 
     const handleSearch = () => {
-        const formattedDate = flightDate ? formatDate(flightDate.toString()) : undefined;
+        const formattedDate = flightDate ? format(flightDate, 'yyyy-MM-dd') : undefined;
 
         FlightService.getFlights(departure?.departure.iata, arrival?.arrival.iata, formattedDate).subscribe({
             next: (response) => {
@@ -110,7 +111,7 @@ const FlightForm: React.FC = () => {
             }
 
             const flightToSave: FlightSubmission = {
-                email: email || '',                
+                email: email || '',
                 airline: flight.airline.name,
                 flightId: flight.id.$oid,
                 departureAirport: flight.departure.airport,
@@ -126,7 +127,7 @@ const FlightForm: React.FC = () => {
             UserService.saveFlightForUser(flightToSave).subscribe({
                 next: () => toast.success(`Added flight from ${flightToSave.departureAirport} to ${flightToSave.arrivalAirport} for user ${email}`),
                 error: (err: ExceptionResponse) => {
-                    if(err.status === 409) {
+                    if (err.status === 409) {
                         toast.warning("User already assigned to this flight");
                     } else {
                         toast.error(err.message);
@@ -146,6 +147,7 @@ const FlightForm: React.FC = () => {
                     <Form.Group className="mb-3" controlId="formAssignedTo">
                         <Form.Label>Origin airport</Form.Label>
                         <Form.Select
+                            data-testid="origin-airport-input"
                             value={departure?.departure?.airport}
                             onChange={handleOriginAirportChange}
                             required
@@ -160,6 +162,7 @@ const FlightForm: React.FC = () => {
 
                         <Form.Label>Destination airport</Form.Label>
                         <Form.Select
+                            data-testid="destination-airport-input"
                             value={arrival?.arrival?.airport}
                             onChange={handleDestinationAirportChange}
                             required
@@ -174,6 +177,7 @@ const FlightForm: React.FC = () => {
 
                         <Form.Label>Flight Date</Form.Label>
                         <DatePicker
+                            data-testid="flight-date-input"
                             selected={flightDate}
                             onChange={handleDateChange}
                             dateFormat="dd.MM.yyyy"
@@ -182,7 +186,7 @@ const FlightForm: React.FC = () => {
                         />
                     </Form.Group>
 
-                    <Button variant="primary" type="button" onClick={handleSearch}>
+                    <Button data-testid="submit-button" variant="primary" type="button" onClick={handleSearch}>
                         Search
                     </Button>
                     <Button variant="secondary" type="button" onClick={handleClearFlights} style={{ marginLeft: '10px' }}>
@@ -207,7 +211,7 @@ const FlightForm: React.FC = () => {
                             <div><strong>Gate:</strong> {flightData.arrival?.gate || "-"}</div>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
-                            <Button style={{ width: 200 }} onClick={() => handleAddToFlights(flightData)}>
+                            <Button data-testid="assign-button" style={{ width: 200 }} onClick={() => handleAddToFlights(flightData)}>
                                 {isValidToken ? "Add to your flights" : "Login to add this flight"}
                             </Button>
                         </div>
@@ -232,7 +236,7 @@ const FlightForm: React.FC = () => {
                                 <div><strong>Gate:</strong> {flight.arrival?.gate || "-"}</div>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
-                                <Button style={{ width: 200 }} onClick={() => handleAddToFlights(flight)}>
+                                <Button data-testid="assign-button" style={{ width: 200 }} onClick={() => handleAddToFlights(flight)}>
                                     {isValidToken ? "Add to your flights" : "Login to add this flight"}
                                 </Button>
                             </div>

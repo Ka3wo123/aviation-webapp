@@ -15,40 +15,42 @@ import CreatedAtUserChart from './CreatedAtUserChart';
 import CreatedAtUser from '../../types/stats/CreatedAtUser';
 import { Tab, Tabs, TabPanel, TabList } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import AviationUserPageable from '../../types/AviationUserPageable';
+import Pagination from '../Pagination';
 
 const { Panel } = Collapse;
 
 function AdminDashboard() {
-    const [users, setUsers] = useState<AviationUser[]>([]);
+    const [usersPageable, setUsersPageable] = useState<AviationUserPageable | undefined>(undefined);
     const [user, setUser] = useState<AviationUser>();
-    const [filteredUsers, setFilteredUsers] = useState<AviationUser[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<AviationUser[] | undefined>([]);
     const [selectedUser, setSelectedUser] = useState<string>('');
     const [userFlights, setUserFlights] = useState<UserFlight[]>([]);
-    const [recentlySelected, setRecentlySelected] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [usersAirlineRatio, setUsersAirlineRatio] = useState<UserAirlineRatio[]>([]);
     const [createdUsers, setCreatedUsers] = useState<CreatedAtUser[]>([]);
-    const [blockedUsersCount, setBlockedUsersCount] = useState<number[]>([]);
-    const [key, setKey] = useState<string>('airline');
+    const [blockedUsersCount, setBlockedUsersCount] = useState<number[] | undefined>([]);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [itemsPerPage, setItemsPerPage] = useState<number>(5);
 
     useEffect(() => {
-        fetchUsers();
+        fetchUsers(currentPage);
         getUserAirlineRatio();
         getCreatedAtUsers();
     }, []);
 
     useEffect(() => {
-        if (users.length > 0) {
+        if (usersPageable?.content && usersPageable.content.length > 0) {
             getBlockedUsersCount();
         }
-    }, [users]);
+    }, [usersPageable]);
 
-    const fetchUsers = () => {
+    const fetchUsers = (page: number) => {
         try {
-            userService.getUsers().subscribe(
-                (users) => {
-                    setUsers(users);
-                    setFilteredUsers(users);
+            userService.getUsersPageable(page, itemsPerPage).subscribe(
+                (response) => {
+                    setUsersPageable(response);
+                    setFilteredUsers(response.content);
                 }
             );
         } catch (error) {
@@ -72,7 +74,9 @@ function AdminDashboard() {
         try {
             userService.getBlockedUsersCount().subscribe(
                 (count) => {
-                    setBlockedUsersCount([count, users.length]);
+                    if (usersPageable) {
+                        setBlockedUsersCount([count, usersPageable?.totalSize]);
+                    }
                 }
             )
         } catch (error) {
@@ -95,13 +99,13 @@ function AdminDashboard() {
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.toLowerCase();
         setSearchQuery(query);
-        setFilteredUsers(users.filter(user => user.email.toLowerCase().includes(query)));
+        setFilteredUsers(usersPageable?.content.filter(user => user.email.toLowerCase().includes(query)));
     };
 
     const handleToggleBlock = (email: string, currentStatus: boolean | undefined) => {
         try {
             userService.setUserStatus(email, currentStatus).subscribe(
-                () => fetchUsers()
+                () => fetchUsers(currentPage)
             );
         } catch (error) {
             console.error('Error updating user status:', error);
@@ -112,7 +116,7 @@ function AdminDashboard() {
     const handleDeleteUser = (email: string) => {
         try {
             userService.deleteUser(email).subscribe(
-                () => fetchUsers()
+                () => fetchUsers(currentPage)
             );
 
         } catch (error) {
@@ -134,23 +138,34 @@ function AdminDashboard() {
     };
 
     const handleUnassign = (email: string, flightId: number) => {
-        setSelectedUser(email);
-        if (!recentlySelected) {
-            userService.deleteFlight(email, flightId).subscribe(
-                () => fetchUserDetails(email)
-            );
-        }
+        userService.deleteFlight(email, flightId).subscribe({
+            next: () => {
+                fetchUserDetails(email);
+                setUserFlights((prev) => prev.filter(flight => flight.id !== flightId))
+                toast.success("Flight unassigned successfully!");
+            }, error: (error) => {
+                console.error("Error unassigning flight:", error);
+                toast.error("Failed to unassign flight.");
+            }
+
+
+        })
     };
+
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        fetchUsers(page);
+    };
+
 
 
     const handleUserClick = (email: string) => {
         setSelectedUser(email);
-        if (!recentlySelected) {
-            fetchUserDetails(email);
-            userService.getFlightsForUser(email).subscribe(
-                (flights) => setUserFlights(flights)
-            );
-        }
+        fetchUserDetails(email);
+        userService.getFlightsForUser(email).subscribe(
+            (flights) => setUserFlights(flights)
+        );
     };
 
     return (
@@ -181,7 +196,7 @@ function AdminDashboard() {
                 className="mb-3"
             />
             <ListGroup className="user-list">
-                {filteredUsers.map(user => (
+                {filteredUsers?.map(user => (
                     <ListGroup.Item key={user.email} onClick={() => handleUserClick(user.email)} action className={user.role === 'ADMIN' ? "admin-item" : "user-item"}>
                         <div className="user-header">
                             <strong>{user.name} {user.surname}</strong> ({user.email})
@@ -277,6 +292,11 @@ function AdminDashboard() {
                     </ListGroup.Item>
                 ))}
             </ListGroup>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination currentPage={currentPage} totalPages={usersPageable ? Math.ceil(usersPageable.totalSize / itemsPerPage) : 0} onPageChange={handlePageChange}></Pagination>
+
+            </div>
+
         </div>
     );
 }

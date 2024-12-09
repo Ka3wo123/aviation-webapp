@@ -30,7 +30,7 @@ const LoginForm: React.FC = () => {
         const { access_token } = response.data;
         const decoded: { roles?: string } = jwtDecode(access_token);
         if (decoded.roles?.includes('ADMIN')) {
-          window.open('/admin-dashboard', '_blank')          
+          window.open('/admin-dashboard', '_blank')
         }
         toast.success("Login successful!");
         const from = location.state?.from || "/";
@@ -59,6 +59,7 @@ const LoginForm: React.FC = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control
+            data-testid="email-input"
             type="email"
             value={email}
             onChange={handleEmailChange}
@@ -69,6 +70,7 @@ const LoginForm: React.FC = () => {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
+            data-testid="password-input"
             type="password"
             value={password}
             onChange={handlePasswordChange}
@@ -77,7 +79,7 @@ const LoginForm: React.FC = () => {
         </Form.Group>
         <Link to={'/forgot-password'} style={{ color: '#fff', textDecoration: 'none' }}>Forgot password?</Link>
 
-        <Button variant="primary" type="submit">
+        <Button data-testid="submit-button" variant="primary" type="submit">
           Login
         </Button>
       </Form>

@@ -5,15 +5,15 @@ import dayjs from 'dayjs';
 const CreatedAtUserChart = ({ data }: { data: CreatedAtUser[] }) => {
     
     const formattedData = data.map((item) => ({
-        createdAt: dayjs(item.createdat).format('YYYY-MM-DD'),
+        createdAt: dayjs(item.createdat).format('DD.MM.YYYY'),
         count: item.count
     }));
 
     return (
         <ResponsiveContainer width="100%" height={400}>
             <LineChart data={formattedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="4 5" />
-                <XAxis dataKey="createdAt" tick={{ textAnchor: 'end' }} height={80} />
+                <CartesianGrid strokeDasharray="4 4" />
+                <XAxis dataKey="createdAt" height={80} tickMargin={12}/>
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Legend />

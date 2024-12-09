@@ -9,7 +9,7 @@ import { FaGooglePlay, FaApple } from 'react-icons/fa';
 const HomePage = () => {
     return (
         <div>
-            <div className="bg-secondary text-center py-5 mb-4">
+            <div data-testid="cypress-container" className="bg-secondary text-center py-5 mb-4">
                 <Container>
                     <h1 className="display-4">Aviation Explorer</h1>
                     <p className="lead">Discover the world's airlines, airports, and flights with ease.</p>

@@ -12,7 +12,7 @@ const RegistrationForm: React.FC = () => {
         password: "",
         phoneNumber: undefined,
         age: undefined,
-        role: Role.USER      
+        role: Role.USER
     });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,11 +27,11 @@ const RegistrationForm: React.FC = () => {
         e.preventDefault();
         UserService.registerUser(newUser).subscribe({
             next: (response) => {
-                if (response.status === 201) {                    
+                if (response.status === 201) {
                     toast.success("User created - you can login");
                 } else {
                     toast.error(response.data.message);
-                }                
+                }
             },
             error: (err: any) => {
                 const errorResponse = err.response?.data;
@@ -52,6 +52,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">Name</label>
                     <input
+                        data-testid="name-register-input"
                         type="text"
                         name="name"
                         value={newUser.name}
@@ -63,6 +64,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">Surname</label>
                     <input
+                        data-testid="surname-register-input"
                         type="text"
                         name="surname"
                         value={newUser.surname}
@@ -74,6 +76,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">E-mail</label>
                     <input
+                        data-testid="email-register-input"
                         type="email"
                         name="email"
                         value={newUser.email}
@@ -85,6 +88,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">Password</label>
                     <input
+                        data-testid="password-register-input"
                         type="password"
                         name="password"
                         value={newUser.password}
@@ -96,6 +100,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">Phone (optional)</label>
                     <input
+                        data-testid="phone-register-input"
                         type="tel"
                         name="phoneNumber"
                         value={newUser.phoneNumber || ''}
@@ -106,6 +111,7 @@ const RegistrationForm: React.FC = () => {
                 <div className="mb-3">
                     <label className="form-label">Age (optional)</label>
                     <input
+                        data-testid="age-register-input"
                         type="number"
                         name="age"
                         value={newUser.age || ''}
@@ -113,7 +119,7 @@ const RegistrationForm: React.FC = () => {
                         className="form-control"
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button data-testid="button-register-submit" type="submit" className="btn btn-primary">
                     Register
                 </button>
             </form>

@@ -44,7 +44,7 @@ const UserFlights = () => {
     };
 
     const renderFlights = (flights: UserFlight[]) => (
-        <ListGroup as="ol" numbered>
+        <ListGroup data-testid="current-flight-list" as="ol" numbered>
             {flights.map((flight) => (
                 <ListGroup.Item key={flight.id} as="li" className="mb-3">
                     <div className="ms-2 me-auto">
@@ -103,7 +103,7 @@ const UserFlights = () => {
                     onSelect={(k) => setKey(k || 'current')}
                     className="mb-3"
                 >
-                    <Tab eventKey="current" title="Current Flights">
+                    <Tab data-testid="current-flights-tab" eventKey="current" title="Current Flights">
                         {currentFlights.length > 0 ? renderFlights(currentFlights) : (
                             <Alert variant="info">You have no current flights.</Alert>
                         )}
